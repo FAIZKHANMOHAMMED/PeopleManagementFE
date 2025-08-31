@@ -1,0 +1,294 @@
+// Base styles
+:host {
+  --sidebar-width: 250px;
+  --topbar-height: 64px;
+  --mobile-breakpoint: 992px;
+  --tablet-breakpoint: 1200px;
+  --transition-speed: 0.3s;
+  
+  // Prevent horizontal scroll
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100%;
+}
+
+// Sidebar styles
+.app-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f8f9fa;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.sidebar {
+  width: var(--sidebar-width);
+  background: white;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  transition: all var(--transition-speed) ease;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 1040;
+  transform: translateX(0);
+  
+  .sidebar-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid #eee;
+    
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--bs-primary);
+      margin: 0;
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  .nav {
+    flex: 1;
+    padding: 1rem 0;
+   
+    .nav-link {
+      padding: 0.75rem 1.5rem;
+      color: #495057;
+      display: flex;
+      align-items: center;
+      transition: all 0.2s;
+      
+      &:hover {
+        background-color: rgba(67, 97, 238, 0.05);
+        color: var(--bs-primary);
+      }
+      
+      &.active {
+        background-color: rgba(67, 97, 238, 0.1);
+        color: var(--bs-primary);
+        font-weight: 500;
+        border-right: 3px solid var(--bs-primary);
+      }
+      
+      i {
+        font-size: 1.1rem;
+        width: 24px;
+        text-align: center;
+      }
+    }
+  }
+
+  // Sidebar footer removed
+}
+
+// Main content area
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  margin-left: var(--sidebar-width);
+  min-height: 100vh;
+  transition: margin var(--transition-speed) ease;
+  
+  @media (max-width: 991.98px) {
+    margin-left: 0;
+    width: 100%;
+  }
+}
+
+// Top bar styles
+.top-bar {
+  background-color: var(--bs-white);
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--bs-border-color);
+  height: var(--topbar-height);
+  display: flex;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 1020;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  
+  .page-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0;
+    color: var(--bs-gray-800);
+  }
+  
+  .sidebar-toggle {
+    width: 2.5rem;
+    height: 2.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: var(--bs-gray-600);
+    transition: all 0.2s ease;
+    border: none;
+    background: transparent;
+    padding: 0;
+    margin-right: 1rem;
+    
+    &:hover {
+      background-color: var(--bs-gray-100);
+      color: var(--bs-primary);
+    }
+    
+    i {
+      font-size: 1.5rem;
+    }
+  }
+}
+
+// Main content
+.content {
+  flex: 1;
+  padding: 1.5rem;
+  overflow-y: auto;
+  overflow-x: hidden; // Prevent horizontal scroll
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  
+  // Ensure tables and other content don't cause horizontal scroll
+  table, img, iframe, video, .table-responsive {
+    max-width: 100%;
+  }
+  
+  // Prevent long words from breaking layout
+  * {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+}
+
+// Responsive styles
+@media (max-width: 991.98px) {
+  .sidebar {
+    transform: translateX(-100%);
+    
+    &.show {
+      transform: translateX(0);
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+  }
+  
+  // Overlay when sidebar is open
+  .sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1039;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--transition-speed) ease, visibility var(--transition-speed) ease;
+    
+    &.show {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+}
+
+// Tablet styles
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .sidebar {
+    width: 220px;
+  }
+  
+  .main-content {
+    margin-left: 0;
+  }
+}
+
+// Mobile styles
+@media (max-width: 767.98px) {
+  :root {
+    --sidebar-width: 280px;
+  }
+  
+  // Ensure no horizontal scroll on mobile
+  html, body {
+    overflow-x: hidden;
+    width: 100%;
+    position: relative;
+  }
+  
+  .app-container {
+    width: 100%;
+    overflow: hidden;
+  }
+  
+  .top-bar {
+    padding: 0.75rem 1rem;
+    
+    .page-title {
+      font-size: 1.25rem;
+    }
+  }
+  
+  .content {
+    padding: 1rem;
+  }
+}
+
+// Extra small devices
+@media (max-width: 575.98px) {
+  :root {
+    --topbar-height: 56px;
+  }
+  
+  .sidebar {
+    width: 85%;
+    max-width: 300px;
+  }
+  
+  .top-bar {
+    .actions {
+      .btn-icon {
+        width: 32px;
+        height: 32px;
+        font-size: 0.9rem;
+      }
+    }
+  }
+}
+
+// Animation for page transitions
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+// Prevent horizontal scroll on all elements
+* {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+// Ensure images and other media are responsive
+img, video, iframe {
+  max-width: 100%;
+  height: auto;
+}
+
+// Fix for Bootstrap containers
+.container, .container-fluid {
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+  width: 100%;
+  max-width: 100%;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

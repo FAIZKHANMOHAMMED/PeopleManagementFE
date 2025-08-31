@@ -1,0 +1,109 @@
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="mb-0">Edit Person</h3>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="personForm" (ngSubmit)="onSubmit()">
+            <!-- Error Message -->
+            <div *ngIf="errorMessage" class="alert alert-danger">
+              {{ errorMessage }}
+            </div>
+
+            <!-- Name Field -->
+            <div class="mb-3">
+              <label for="name" class="form-label">Name</label>
+              <input
+                type="text"
+                class="form-control"
+                id="name"
+                formControlName="name"
+                [class.is-invalid]="personForm.get('name')?.invalid && personForm.get('name')?.touched"
+              >
+              <div *ngIf="personForm.get('name')?.touched && personForm.get('name')?.errors?.['required']" class="invalid-feedback">
+                Name is required
+              </div>
+              <div *ngIf="personForm.get('name')?.touched && personForm.get('name')?.errors?.['minlength']" class="invalid-feedback">
+                Name must be at least 2 characters
+              </div>
+            </div>
+
+            <!-- Age Field -->
+            <div class="mb-3">
+              <label for="age" class="form-label">Age</label>
+              <input
+                type="number"
+                class="form-control"
+                id="age"
+                formControlName="age"
+                [class.is-invalid]="personForm.get('age')?.invalid && personForm.get('age')?.touched"
+              >
+              <div *ngIf="personForm.get('age')?.touched && personForm.get('age')?.errors?.['required']" class="invalid-feedback">
+                Age is required
+              </div>
+              <div *ngIf="personForm.get('age')?.touched && personForm.get('age')?.errors?.['min']" class="invalid-feedback">
+                Age must be at least 1
+              </div>
+              <div *ngIf="personForm.get('age')?.touched && personForm.get('age')?.errors?.['max']" class="invalid-feedback">
+                Age must be less than 120
+              </div>
+            </div>
+
+            <!-- Gender Field -->
+            <div class="mb-3">
+              <label class="form-label">Gender</label>
+              <div class="form-check" *ngFor="let gender of ['Male', 'Female', 'Other']">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  [id]="'gender-' + gender.toLowerCase()"
+                  [value]="gender"
+                  formControlName="gender"
+                  [class.is-invalid]="personForm.get('gender')?.invalid && personForm.get('gender')?.touched"
+                >
+                <label class="form-check-label" [for]="'gender-' + gender.toLowerCase()">
+                  {{ gender }}
+                </label>
+              </div>
+              <div *ngIf="personForm.get('gender')?.touched && personForm.get('gender')?.errors?.['required']" class="invalid-feedback d-block">
+                Please select a gender
+              </div>
+            </div>
+
+            <!-- Mobile Field -->
+            <div class="mb-4">
+              <label for="mobile" class="form-label">Mobile Number</label>
+              <input
+                type="tel"
+                class="form-control"
+                id="mobile"
+                formControlName="mobile"
+                placeholder="10-digit number"
+                [class.is-invalid]="personForm.get('mobile')?.invalid && personForm.get('mobile')?.touched"
+              >
+              <div *ngIf="personForm.get('mobile')?.touched && personForm.get('mobile')?.errors?.['required']" class="invalid-feedback">
+                Mobile number is required
+              </div>
+              <div *ngIf="personForm.get('mobile')?.touched && personForm.get('mobile')?.errors?.['pattern']" class="invalid-feedback">
+                Please enter a valid 10-digit mobile number
+              </div>
+            </div>
+
+            <!-- Form Actions -->
+            <div class="d-flex justify-content-between">
+              <button type="button" class="btn btn-outline-secondary" (click)="onCancel()" [disabled]="isSubmitting">
+                Cancel
+              </button>
+              <button type="submit" class="btn btn-primary" [disabled]="personForm.invalid || isSubmitting">
+                <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                {{ isSubmitting ? 'Updating...' : 'Update' }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

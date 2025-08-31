@@ -1,0 +1,88 @@
+/* Global Reset */
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+  position: relative;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Responsive Images and Media */
+img, video, iframe, canvas, svg {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Tables */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  
+  table {
+    min-width: 100%;
+    width: auto;
+  }
+}
+
+/* Forms */
+input, textarea, select, button {
+  max-width: 100%;
+}
+
+/* Layout Containers */
+.container, 
+.container-fluid {
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Mobile-specific fixes */
+@media (max-width: 767.98px) {
+  html, body {
+    position: relative;
+    width: 100%;
+    overflow-x: hidden;
+  }
+  
+  /* Prevent horizontal scroll caused by negative margins */
+  .row {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  
+  /* Ensure all containers are full width */
+  .container, .container-fluid {
+    padding-left: 15px;
+    padding-right: 15px;
+    width: 100%;
+    max-width: 100%;
+  }
+  
+  /* Fix for fixed elements */
+  .fixed-top, .fixed-bottom, .sticky-top {
+    left: 0;
+    right: 0;
+    width: 100%;
+  }
+  
+  /* Prevent horizontal scroll on all elements */
+  * {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+}
