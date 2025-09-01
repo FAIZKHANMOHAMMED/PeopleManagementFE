@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Person</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { max-width: 400px; }
+        p { line-height: 1.6; }
+        .actions { margin-top: 20px; }
+        button { padding: 10px 15px; background-color: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        .back-link { margin-left: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Delete Person</h1>
+        <p>Are you sure you want to delete <strong><%= person.name %></strong>?</p>
+        <div class="actions">
+            <form action="/person/<%= person._id %>/delete" method="POST" style="display: inline;">
+                <button type="submit">Delete</button>
+            </form>
+            <a href="/person" class="back-link">Cancel</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,63 +1,69 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, throwError } from 'rxjs';
-import { delay } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+import { Observable, map } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface Person {
-  id?: number;
+  id?: string; // maps to backend _id
   name: string;
   age: number;
   gender: string;
-  mobile: string;
+  mobile: string; // maps to backend mobileNumber
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class PeopleService {
-  private people: Person[] = [
-    { id: 1, name: 'John Doe', age: 30, gender: 'Male', mobile: '1234567890' },
-    { id: 2, name: 'Jane Smith', age: 25, gender: 'Female', mobile: '0987654321' },
-  ];
-  private lastId = 2;
+  private base = `${environment.apiBase}/person`;
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
-  getPeople(): Observable<Person[]> {
-    return of([...this.people]).pipe(delay(300)); // Simulate network delay
+  private fromApi(doc: any): Person {
+    return {
+      id: doc._id,
+      name: doc.name,
+      age: doc.age,
+      gender: doc.gender,
+      mobile: doc.mobileNumber,
+    };
   }
 
-  getPerson(id: number): Observable<Person> {
-    const person = this.people.find(p => p.id === id);
-    if (person) {
-      return of({...person}).pipe(delay(300));
-    }
-    return throwError(() => new Error('Person not found'));
+  private toApi(p: Omit<Person, 'id'> | Person): any {
+    return {
+      name: p.name,
+      age: p.age,
+      gender: p.gender,
+      mobileNumber: p.mobile,
+    };
+  }
+
+  getPeople(): Observable<Person[]> {
+    return this.http.get<any[]>(this.base).pipe(
+      map(arr => arr.map(d => this.fromApi(d)))
+    );
+  }
+
+  getPerson(id: string): Observable<Person> {
+    return this.http.get<any>(`${this.base}/${id}`).pipe(
+      map(d => this.fromApi(d))
+    );
   }
 
   addPerson(person: Omit<Person, 'id'>): Observable<Person> {
-    const newPerson: Person = {
-      ...person,
-      id: ++this.lastId
-    };
-    this.people.push(newPerson);
-    return of(newPerson).pipe(delay(300));
+    return this.http.post<any>(this.base, this.toApi(person)).pipe(
+      map(d => this.fromApi(d))
+    );
   }
 
   updatePerson(person: Person): Observable<Person> {
-    const index = this.people.findIndex(p => p.id === person.id);
-    if (index !== -1) {
-      this.people[index] = person;
-      return of({...person}).pipe(delay(300));
-    }
-    return throwError(() => new Error('Person not found'));
+    if (!person.id) throw new Error('id is required for update');
+    return this.http.put<any>(`${this.base}/${person.id}`, this.toApi(person)).pipe(
+      map(d => this.fromApi(d))
+    );
   }
 
-  deletePerson(id: number): Observable<void> {
-    const index = this.people.findIndex(p => p.id === id);
-    if (index !== -1) {
-      this.people.splice(index, 1);
-      return of(undefined).pipe(delay(300));
-    }
-    return throwError(() => new Error('Person not found'));
+  deletePerson(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.base}/${id}`);
   }
 }

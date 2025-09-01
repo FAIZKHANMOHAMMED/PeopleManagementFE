@@ -41,11 +41,11 @@ export class PeopleListComponent implements OnInit {
     });
   }
 
-  onEdit(id: number): void {
+  onEdit(id: string): void {
     this.router.navigate(['/people/edit', id]);
   }
 
-  onDelete(id: number): void {
+  onDelete(id: string): void {
     if (confirm('Are you sure you want to delete this person?')) {
       this.peopleService.deletePerson(id).subscribe({
         next: () => {

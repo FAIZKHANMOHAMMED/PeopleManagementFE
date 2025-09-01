@@ -15,7 +15,7 @@ export class EditPersonComponent implements OnInit {
   personForm: FormGroup;
   errorMessage: string = '';
   isSubmitting = false;
-  personId: number | null = null;
+  personId: string | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -35,13 +35,13 @@ export class EditPersonComponent implements OnInit {
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
       if (id) {
-        this.personId = +id;
+        this.personId = id;
         this.loadPerson(this.personId);
       }
     });
   }
 
-  loadPerson(id: number): void {
+  loadPerson(id: string): void {
     this.peopleService.getPerson(id).subscribe({
       next: (person) => {
         this.personForm.patchValue({
